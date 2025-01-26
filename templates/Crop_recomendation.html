@@ -1,0 +1,395 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Crop Recommendation System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+    <style>
+        body {
+            background-color: #000000;
+            font-family: 'Roboto', sans-serif;
+            color: #F5F5F5;
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            margin-top: 40px;
+        }
+
+        .warning {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            font-weight: bold;
+            border-radius: 0px;
+            max-width: 1500px;
+            padding-bottom: 20px;
+            margin-top: 50px;
+            backdrop-filter: blur(10px);
+            
+        }
+
+        .card {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            color: rgb(241, 239, 240);
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card .card-body {
+            padding: 20px;
+            background-color: #222;
+        }
+
+        .card .card-title,
+        .card .card-text {
+            color: #FFD700;
+        }
+
+        input,
+        button {
+            border-radius: 5px;
+            border: none;
+        }
+
+        input:focus,
+        button:focus {
+            outline: none;
+        }
+
+        .form-control {
+            background-color: #333;
+            color: #FFF;
+            font-size: 16px;
+        }
+
+        .form-control:focus {
+            background-color: #555;
+        }
+
+        button {
+            background-color: #FFD700;
+            color: #222;
+            font-size: 18px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #FFA500;
+            transform: scale(1.05);
+        }
+
+        .text-card {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #FFF;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+            margin-left: 15px;
+            width: 350px;
+            border: 2px solid grey;
+        }
+
+        .text-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+        }
+
+        .text-card p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .icons img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .icons img:hover {
+            transform: scale(1.2);
+        }
+
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .text-container {
+            width: 40%;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .shadow-lg {
+            box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+        }
+
+        .chart {
+            position: relative;
+            height: 40vh;
+            width: 80vw;
+        }
+
+        @media (max-width: 768px) {
+            .form-container,
+            .text-container {
+                width: 100%;
+            }
+
+            .main-content {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .text-card-big {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #FFF;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+            margin-left: 15px;
+            width: 730px;
+            border: 2px solid grey;
+        }
+
+        .text-card-big h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+        }
+
+        .text-card-big p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .icons img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .icons img:hover {
+            transform: scale(1.2);
+        }
+
+      iframe{
+        width:600px;
+        height:360px;
+        border-radius:14px;
+        filter:invert(100%);
+      }
+      .text-card-3 {
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #FFF;
+        padding: 20px;
+        border-radius: 15px;
+        width: 630px;
+        border: 2px solid grey;
+    }
+    #map{
+        width: 600px;
+        height: 360px;
+        margin-left:40px;
+        border-radius:15px;
+        
+    }
+
+
+    </style>
+    <!-- Font Awesome link -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg" style="background: linear-gradient(to right, #006400, #1d1d1d); border-bottom:2px solid white;">
+        <div class="container-fluid">
+            <!-- Round Image Icon -->
+            <a class="navbar-brand" href="/" style="font-family: 'Orbitron', sans-serif; font-weight: bold; color: white;">
+                <img src="https://static.vecteezy.com/system/resources/previews/000/626/625/original/green-leaf-logo-vector.jpg" alt="Logo" style="border-radius: 50%; width: 40px; height: 40px; margin-right: 10px;">
+                EcoCrop Advisor
+            </a>
+            <img src="https://media.giphy.com/media/IQYoP7rv3Qz6g/giphy.gif" alt="Logo" style="border-radius:4px; width: 120px; height: 50px; margin-right: 10px;">
+             
+        </div>
+    </nav>
+    
+    <!-- Include this in your HTML to load the 'Orbitron' font -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    
+
+    <section>
+        <div class="container my-3 mt-3">
+            <div class="main-content">
+                <!-- Text Card (Left) -->
+                <div class="text-container">
+                    <div class="text-card-big">
+                        <h3 style="color: rgb(39, 245, 3); font-weight: bold;"><i class="fas fa-tractor" style="color: rgb(39, 245, 3);"></i> About the System</h3>
+                       
+                        <h4>Welcome To <span style="font-weight:bold; color:rgb(16, 221, 16);">EcoCrop Advisor</span>.</h4>
+                        <p>    EcoCrop Advisor is a next-generation crop advisory platform designed for modern agriculture. It analyzes critical soil and environmental factors such as Nitrogen, Phosphorus, and Potassium. By providing precise crop recommendations, it helps farmers make informed decisions. Maximize yields and enhance your farming practices with HarvestHub!</p>  </div>
+
+                    <!-- Warning Card (Below the previous one) -->
+                    <div class="text-card" style="text-align: left; padding: 20px; border-radius: 10px;">
+                        <h3 style="color: rgb(39, 245, 3); font-weight: bold;">
+                            <i class="fas fa-check-circle" style="color: rgb(39, 245, 3);"></i> NOTE
+                        </h3>
+                        
+                        <p><strong>Remember the parameters:</strong><br><br>
+                            
+                            <strong>N (Nitrogen):</strong> kg/ha (kilograms per hectare)<br>
+                            <strong>P (Phosporus):</strong> kg/ha(kilograms per hectare)<br>
+                            <strong>K (Potassium):</strong> kg/ha <br>
+                            <strong>Temperature:</strong> °C (degrees Celsius)<br>
+                            <strong>Humidity:</strong> % (percentage)<br>
+                            <strong>pH:</strong> Dimensionless (pH scale)<br>
+                            <strong>Rainfall:</strong> mm (millimeters)
+                        </p>
+                    </div>
+                    
+                    <div class="text-card" style="margin-top: -360px; margin-left: 390px; border: 2px solid red; border-radius: 10px;">
+                        <h3 style="color: red; font-weight: bold;">⚠️ WARNING !! </h3>
+                        <p>
+                            By inputting the necessary parameters 
+                            the system uses a trained machine learning model to predict the most suitable crops for your given conditions,
+                            helping you optimize agricultural production.<br><br>
+                            
+                            <strong>Note:</strong> If you provide incorrect or illogical values for any of the parameters, the output may not be accurate.
+                            Please ensure all data entered is valid and within reasonable ranges for correct results.
+                        </p>
+                    </div>
+                    
+                </div>
+
+                <!-- Form (Right) -->
+                <div class="form-container" style="margin-top:30px;">
+                    <form action="/predict" method="POST">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="Nitrogen">Nitrogen</label>
+                                <input type="number" id="Nitrogen" name="Nitrogen" placeholder="Enter Nitrogen" class="form-control" required step="0.01">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="Phosphorus">Phosporus</label>
+                                <input type="number" id="Phosphorus" name="Phosporus" placeholder="Enter Phosphorus" class="form-control" required step="0.01">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="Potassium">Potassium</label>
+                                <input type="number" id="Potassium" name="Potassium" placeholder="Enter Potassium" class="form-control" required step="0.01">
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-4">
+                                <label for="Temperature">Temperature (°C) </label>
+                                <input type="number" step="0.01" id="Temperature" name="Temperature" placeholder="Enter Temperature in °C" class="form-control" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="Humidity">Humidity</label>
+                                <input type="number" step="0.01" id="Humidity" name="Humidity" placeholder="Enter Humidity in %" class="form-control" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="pH">pH</label>
+                                <input type="number" step="0.01" id="pH" name="pH" placeholder="Enter pH value" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-4">
+                                <label for="Rainfall">Rainfall (mm)</label>
+                                <input type="number" step="0.01" id="Rainfall" name="Rainfall" placeholder="Enter Rainfall in mm" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="btn btn-primary btn-lg">Get Recommendation</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    {% if result %}
+                    <div class="card bg-dark" style="width: 18rem;">
+                        <!-- Use Online Image URL -->
+                        <img src="https://static.vecteezy.com/system/resources/previews/000/623/023/original/agriculture-business-logo-template-unique-green-vector-image.jpg" 
+                             style="width: 70px; height: 70px; border-radius:50%; margin-top:-70px;" class="card-img-top" alt="Recommended Crop">
+                        <div class="card-body">
+                            <h5 class="card-title" style="color:green; font-weight:bold;">Recommended Crop for Cultivation:</h5>
+                            <p class="card-text" style="color:white;">{{ result }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                </div>
+            </div>
+        </div>
+    </section>
+
+ 
+
+  <h1 style="font-size:50px;">Your <span style="color:rgb(18, 229, 18);">Geo</span> Location</h1>
+
+<section style="margin-left:50px; margin-top:110px;">
+    <div class="text-card-3">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3684.512695861584!2d88.48732647512625!3d22.559920179500644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a020b267a3cdc13%3A0xb3b21d652126f40!2sUniversity%20of%20Engineering%20%26%20Management%2C%20Kolkata%20(UEM)!5e0!3m2!1sen!2sin!4v1737643272525!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+     <div class="text-card-3" style="margin-top:-400px; margin-left:770px; width:650px; height:400px;">
+ 
+    </div>
+       <div  style="margin-top:-380px; margin-left:795px;" id='map'></div>
+</section>
+
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js"></script>
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoiaGFycnkxMjM0OTgiLCJhIjoiY2s4OXh1c3BqMGFsZzNvbXA3YmYyaGFhYSJ9.wmVMiMxlSqpzJPsj-UXr3Q';
+  
+  var map = new mapboxgl.Map({
+    container: 'map', // The id of the container element
+    style: 'mapbox://styles/mapbox/dark-v10', 
+    center: [88.4393, 22.5791], // Coordinates for UEM Kolkata
+    zoom: 6 // Reduced zoom level for a broader view
+  });
+
+
+ 
+</script>
+
+
+
+</body>
+
+</html>
