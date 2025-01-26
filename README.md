@@ -1,6 +1,6 @@
-# Crop Detection Model Overview
+# EcoCrop Advisor Model Overview
 
-The Crop Detection Model leverages machine learning algorithms for the classification of crop types based on a range of input data. This project follows a structured pipeline, from **data collection** to **result evaluation**, ensuring reliable and accurate predictions.
+The Crop prediction Model leverages machine learning algorithms for the classification of crop types based on a range of input data. This project follows a structured pipeline, from **data collection** to **result evaluation**, ensuring reliable and accurate predictions.
 
 ![Crop Detection Model Overview](https://i.postimg.cc/85z4Zj0n/Screenshot-2025-01-26-170806.png)
 
