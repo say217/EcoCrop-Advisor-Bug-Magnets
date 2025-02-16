@@ -3,7 +3,7 @@ import numpy as np
 import pandas
 import sklearn
 import pickle
-
+   
 model = pickle.load(open('model_crop.pkl','rb'))
 sc = pickle.load(open('standscaler_crop.pkl','rb'))
 mx = pickle.load(open('minmaxscaler.pkl','rb'))
